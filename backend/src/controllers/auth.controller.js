@@ -1,6 +1,36 @@
+import User from "../models/users.model";
+import bcrypt from "bcryptjs"
 
-export const signup = (req,res) =>{
-    res.send("signup route");
+export const signup = async (req,res) =>{
+    const {fullName,email,password} = req.body
+    try{
+        if (password.length < 6) {
+            return res.status(400).json({message: "Votre mot de passe doit contenir au moins 6 caractères"});
+        }
+        
+        const user = await User.findOne({email});
+        if (user){ return res.status(400).json({message : "Un utilisateur utilise déja cet email"})};
+
+        const salt = await bcrypt.genSalt(10)
+        const hashedPassword = await bcrypt.hash(password, salt);
+        console.log('Mot de passe haché :', hashedPassword);
+        
+        const newUser = new User({
+            fullName,
+            email,
+            password: hashedPassword
+        })
+
+        if(newUser){
+            
+
+        }else {
+            res.status(400).json({message: "Utilisateur invalide"})
+        }
+
+    }catch(error){
+        console.log('Erreur lors du hachage du mot de passe :', error);
+    }
 }
 export const login = (req,res) =>{
     res.send("login route");

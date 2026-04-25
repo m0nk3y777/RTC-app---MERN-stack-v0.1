@@ -1,4 +1,5 @@
-import User from "../models/users.model";
+import { generateToken } from "../libs/utils.js";
+import User from "../models/users.model.js";
 import bcrypt from "bcryptjs"
 
 export const signup = async (req,res) =>{
@@ -22,14 +23,21 @@ export const signup = async (req,res) =>{
         })
 
         if(newUser){
-            
+            generateToken(newUser._id,res)
+            await newUser.save();
+            res.status(201).json({
+                _id: newUser._id,
+                fullName: newUser.fullName,
+                email: newUser.email,
+                profilePic: newUser.profilePic
+            })
 
         }else {
             res.status(400).json({message: "Utilisateur invalide"})
         }
 
     }catch(error){
-        console.log('Erreur lors du hachage du mot de passe :', error);
+        console.log('Erreur lors de la création du nouvel utilisateur :', error);
     }
 }
 export const login = (req,res) =>{

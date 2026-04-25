@@ -5,6 +5,11 @@ import bcrypt from "bcryptjs"
 export const signup = async (req,res) =>{
     const {fullName,email,password} = req.body
     try{
+
+        if (!password || !email || !fullName ){
+            return res.status(400).json({message: "Informations manquantes"});
+        }
+
         if (password.length < 6) {
             return res.status(400).json({message: "Votre mot de passe doit contenir au moins 6 caractères"});
         }

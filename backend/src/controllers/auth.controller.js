@@ -51,17 +51,13 @@ export const login = async (req,res) =>{
 
     try{
         const user = await User.findOne({email})
-
         if(!user){
             return res.status(400).json({message:"Verifiez la combinaison email/mot de passe"})
         }
-
         const isPassOk = await bcrypt.compare(password, user.password)
-
         if(!isPassOk){
             return res.status(400).json({message:"Verifiez la combinaison email/mot de passe"})
         }
-
         generateToken(user._id,res)
         res.status(200).json({
             _id:user._id,
@@ -81,5 +77,13 @@ export const logout = (req,res) =>{
     } catch (error) {
         console.log("Error in logout controller", error.message);
         res.status(500).json({message: "Erreur en lien avec le serveur"})
+    }
+}
+
+export const update = async (req, res) => {
+    try {
+        
+    } catch (error) {
+        
     }
 }

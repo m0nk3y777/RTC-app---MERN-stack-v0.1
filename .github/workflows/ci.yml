@@ -18,4 +18,4 @@ jobs:
         cache-dependency-path: backend/package-lock.json
     - run: npm ci
       working-directory: backend
-    - run : echo "Tout est ok"
+    - run : echo "L'environnement est setup"

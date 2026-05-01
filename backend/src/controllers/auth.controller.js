@@ -90,8 +90,27 @@ export const update = async (req, res) => {
             return res.status(400).json({message : "Profile pic is required"})
         }
 
-        await 
+        const bufferedImage = Buffer.from(profilePic.split(",")[1], "base64")
+        const mystream = userId + "-" + Date.now()+".jpg"
+        const sizeImage = bufferedImage.length
+
+        await minioClient.putObject(process.env.MINIO_DEFAULT_BUCKET, mystream , bufferedImage , sizeImage)
+
+        const imageURL = "http://localhost:9000" + "/" + process.env.MINIO_DEFAULT_BUCKET + "/" + mystream
+
+        const updatedUser = await User.findByIdAndUpdate(userId,{profilePic:imageURL}, {new: true})
+
+        res.status(200).json(updatedUser)
     } catch (error) {
-        
+        console.log("Erreur lors de la maj du profil")
+        res.status(500).json({message: "Erreur interne du serveur"})
+    }
+}
+
+export const checkAuth = async (req,res) => {
+    try {
+        res.status(200).json(req.user)
+    } catch (error) {
+        res.status(500).json({message :"Erreur coté serveur"})
     }
 }

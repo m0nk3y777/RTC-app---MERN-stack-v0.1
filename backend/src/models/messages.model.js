@@ -1,5 +1,17 @@
 import mongoose from "mongoose";
 
-const message = new mongoose.Schema({
-        
-})
+const messageSchema = new mongoose.Schema({
+        from : {
+            type: String,
+            required: true,
+        },
+        content: {
+            type: String,
+            required: true,
+        },
+    },
+    {timestamps : true},)
+
+const Message = mongoose.model("Message",messageSchema)
+
+export default Message ;

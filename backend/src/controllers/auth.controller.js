@@ -1,6 +1,7 @@
 import { generateToken } from "../libs/utils.js";
 import User from "../models/users.model.js";
 import bcrypt from "bcryptjs"
+import minioClient from "../libs/minio.js";
 
 export const signup = async (req,res) =>{
     const {fullName,email,password} = req.body
@@ -82,7 +83,14 @@ export const logout = (req,res) =>{
 
 export const update = async (req, res) => {
     try {
-        
+        const{ profilePic } = req.body;
+        const userId = req.user._id;
+
+        if(!profilePic){
+            return res.status(400).json({message : "Profile pic is required"})
+        }
+
+        await 
     } catch (error) {
         
     }
